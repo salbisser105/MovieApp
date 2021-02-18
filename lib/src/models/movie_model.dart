@@ -2,7 +2,7 @@
 
 
 
-import 'dart:convert';
+
 
 class Movies {
   List<Movie> items = new List();
@@ -22,6 +22,7 @@ class Movies {
 }
 
 class Movie {
+  String     uniqueId;
   bool       adult;
   String     backdropPath;
   List<int>  genreIds;
@@ -78,7 +79,20 @@ class Movie {
     if ( posterPath == null ) {
       return 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png';
     }else {
-     return 'https://image.tmdb.org/t/p/w500/$posterPath';
+     return 'https://image.tmdb.org/t/p/original/$posterPath';
+     
+    }
+     
+    
+  }
+
+  getBackgroundImg(){
+
+    if ( posterPath == null ) {
+      return 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png';
+    }else {
+     return 'https://image.tmdb.org/t/p/original/$backdropPath';
+     
     }
      
     

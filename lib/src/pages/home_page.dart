@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:moviesapp/src/providers/movies_providers.dart';
+import 'package:moviesapp/src/search/search_delegate.dart';
 import 'package:moviesapp/src/widgets/card_swiper_widget.dart';
+import 'package:moviesapp/src/widgets/movie_horizontal.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -9,8 +11,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
 
+  moviesProvider.getPopulars();
+
+    return Scaffold(
     appBar: AppBar(
       centerTitle: false,
       title: Text('Cinema Movies'),
@@ -18,7 +22,13 @@ class HomePage extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.search), 
-          onPressed: (){}
+          onPressed: (){
+            showSearch(
+            context:context ,
+            delegate: DataSearch(),
+            //query: 
+            );
+          }
           )
       ],
     ),
@@ -46,7 +56,7 @@ class HomePage extends StatelessWidget {
       );
       }else {
         return Container(
-          height: 400.0,
+          height: 300.0,
           child: Center(
             child:CircularProgressIndicator()
             ),
@@ -60,18 +70,33 @@ Widget _footer(BuildContext context){
 
   return Container(
     width: double.infinity,
+    
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget> [
-        Text('Trending', style: Theme.of(context).textTheme.headline6),
+        Container(
+          padding: EdgeInsets.only(left:20.0),
+        child:Text('Trending', style: Theme.of(context).textTheme.headline6)
+        ),
+        SizedBox(height: 5.0),   
+        StreamBuilder(
+          stream: moviesProvider.popularsStream,        
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            
+            if(snapshot.hasData){
+              return MovieHorizontal(
+                movies: snapshot.data,
+                nextPage: moviesProvider.getPopulars,
+                
+                );
+            }else {
+              return Center(child: CircularProgressIndicator());
+            }
+            
+          },
+          
+        ),
         
-        // FutureBuilder(
-        //   future: Future,
-        //   initialData: InitialData,
-        //   builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //     return ;
-        //   },
-        // ),
-
       ],
     ),
   );
